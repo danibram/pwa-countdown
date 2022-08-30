@@ -12,6 +12,8 @@ import GameSprite from "./Game_Sprite";
 import GameTile from "./Game_Tile";
 import Keyboard from "./keyBoard";
 
+const INITIAL_COUNTER = "00:00";
+
 export default function Countdown() {
   const [enterPress] = useKeyPress("Enter");
   const [scapePress] = useKeyPress("Escape");
@@ -19,7 +21,7 @@ export default function Countdown() {
   const [spacePress] = useKeyPress(" ");
   const [numbersPressed, numberPressed] = useKeyPress("numbers");
 
-  const [counter, setCounter] = useState("00:00");
+  const [counter, setCounter] = useState(INITIAL_COUNTER);
   const [target, setTarget] = useState<null | number>(null);
 
   const [count, isRunning, { startCountdown, stopCountdown }] = useCountdown(
@@ -46,7 +48,7 @@ export default function Countdown() {
 
   const handleStop = () => {
     stopCountdown();
-    setCounter("00:00");
+    setCounter(INITIAL_COUNTER);
     setTarget(null);
     document.title = "Stopped!!";
   };
@@ -72,7 +74,9 @@ export default function Countdown() {
       const seconds = Math.floor(count % 60);
       const counter = padZerosAndJoin([minutes, seconds]);
       setCounter(counter);
-      document.title = counter;
+      if (counter !== INITIAL_COUNTER) {
+        document.title = counter;
+      }
     }
   }, [count]);
 

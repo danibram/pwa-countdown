@@ -22,8 +22,8 @@ class MyDocument extends Document {
             rel="apple-touch-icon"
             href="/icons/apple-touch-icon.png"
           ></link>
+          <meta name="description" content="8bit counter" />
           <meta name="theme-color" content="#2196f3" />
-
           <link rel="shortcut icon" href="/favicon.ico" />
         </Head>
         <body>
