@@ -38,7 +38,7 @@ const Home: NextPage = () => {
             className={
               "font-bold flex justify-start items-center cursor-pointer"
             }
-            href="https://github.com/danibram/fresh-countdown"
+            href="https://github.com/danibram/pwa-countdown"
             rel="noopener noreferrer"
             target="_blank"
           >
