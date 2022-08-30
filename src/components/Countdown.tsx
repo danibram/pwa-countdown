@@ -35,8 +35,12 @@ export default function Countdown() {
 
   const handlePause = () => {
     if (count > 0) {
-      isRunning && stopCountdown();
-      !isRunning && startCountdown();
+      if (isRunning) {
+        stopCountdown();
+        document.title = "Paused!!";
+      } else {
+        startCountdown();
+      }
     }
   };
 
@@ -44,6 +48,7 @@ export default function Countdown() {
     stopCountdown();
     setCounter("00:00");
     setTarget(null);
+    document.title = "Stopped!!";
   };
 
   const handleStart = () => {
@@ -60,11 +65,14 @@ export default function Countdown() {
 
   useEffect(() => {
     if (count < 0) {
+      document.title = "Finished!!";
       handleStop();
     } else {
       const minutes = Math.floor((count % (60 * 60)) / 60);
       const seconds = Math.floor(count % 60);
-      setCounter(padZerosAndJoin([minutes, seconds]));
+      const counter = padZerosAndJoin([minutes, seconds]);
+      setCounter(counter);
+      document.title = counter;
     }
   }, [count]);
 
