@@ -52,7 +52,6 @@ export default function Countdown() {
       number
     ];
 
-    console.log(minutes, seconds);
     if (seconds + minutes * 60 > 0) {
       setTarget(seconds + minutes * 60);
       startCountdown();
@@ -65,7 +64,6 @@ export default function Countdown() {
     } else {
       const minutes = Math.floor((count % (60 * 60)) / 60);
       const seconds = Math.floor(count % 60);
-      console.log(count);
       setCounter(padZerosAndJoin([minutes, seconds]));
     }
   }, [count]);

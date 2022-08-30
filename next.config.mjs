@@ -1,17 +1,16 @@
 import withPreact from "next-plugin-preact";
 import withPWA from "next-pwa";
 
-const pwa = withPWA({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === "development",
-});
+const plugins = [
+  withPWA({
+    dest: "public",
+    register: true,
+    skipWaiting: true,
+    disable: false,
+  }),
+  withPreact,
+];
 
-const preact = withPreact({
-  reactStrictMode: true,
-  swcMinify: true,
-});
 /**
  * Don't be scared of the generics here.
  * All they do is to give us autocompletion when using this.
@@ -21,7 +20,17 @@ const preact = withPreact({
  * @constraint {{import('next').NextConfig}}
  */
 function defineNextConfig(config) {
-  return config;
+  return (_phase, { defaultConfig }) => {
+    return plugins.reduce(
+      (acc, plugin) => {
+        return plugin(acc);
+      },
+      { ...config }
+    );
+  };
 }
 
-export default defineNextConfig(pwa);
+export default defineNextConfig({
+  reactStrictMode: true,
+  swcMinify: true,
+});

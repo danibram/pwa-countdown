@@ -23,6 +23,7 @@ class MyDocument extends Document {
             href="/icons/apple-touch-icon.png"
           ></link>
           <meta name="theme-color" content="#2196f3" />
+
           <link rel="shortcut icon" href="/favicon.ico" />
         </Head>
         <body>
