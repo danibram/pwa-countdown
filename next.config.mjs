@@ -4,9 +4,8 @@ import withPWA from "next-pwa";
 const plugins = [
   withPWA({
     dest: "public",
-    register: true,
-    skipWaiting: true,
-    disable: false,
+    register: false,
+    skipWaiting: false,
   }),
   withPreact,
 ];
