@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import GameTile from "./Game_Tile";
 
 export default function GameSprite(props: {
@@ -24,7 +24,7 @@ export default function GameSprite(props: {
     frame.current = requestAnimationFrame(animate);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     animate();
 
     () => cancelAnimationFrame(frame.current);

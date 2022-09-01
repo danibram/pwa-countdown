@@ -62,9 +62,9 @@ export default function Keyboard(props: {
               <button
                 type="button"
                 className="nes-btn"
-                onClick={() => onStart()}
+                onClick={() => onStop()}
               >
-                &lt;
+                X
               </button>
               <button
                 type="button"
@@ -76,9 +76,9 @@ export default function Keyboard(props: {
               <button
                 type="button"
                 className="nes-btn"
-                onClick={() => onStop()}
+                onClick={() => onStart()}
               >
-                X
+                &lt;
               </button>
             </div>
           </>

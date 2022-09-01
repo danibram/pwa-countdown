@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { compose } from "../helpers/compose";
 import {
   cleanSym,
@@ -6,81 +6,44 @@ import {
   padZerosAndJoin,
   substringFromEnd4,
 } from "../helpers/formating";
-import useCountdown from "../hooks/useCountdown";
+import useCount from "../hooks/useCountdown";
 import { useKeyPress } from "../hooks/useKeyPress";
 import GameSprite from "./Game_Sprite";
 import GameTile from "./Game_Tile";
-import Keyboard from "./keyBoard";
+import Keyboard from "./Keyboard";
 
-const INITIAL_COUNTER = "00:00";
+const INITIAL_COUNTER_VIEW = "00:00";
 
-export default function Countdown() {
+const useCountdown = () => {
   const [enterPress] = useKeyPress("Enter");
   const [scapePress] = useKeyPress("Escape");
   const [backspacePress] = useKeyPress("Backspace");
   const [spacePress] = useKeyPress(" ");
   const [numbersPressed, numberPressed] = useKeyPress("numbers");
 
-  const [counter, setCounter] = useState(INITIAL_COUNTER);
-  const [target, setTarget] = useState<null | number>(null);
+  const [counterView, setCounterView] = useState(INITIAL_COUNTER_VIEW);
+  const [counterTarget, setCounterTarget] = useState<null | number>(null);
 
-  const [count, isRunning, { startCountdown, stopCountdown }] = useCountdown(
-    target ? target : 0
+  const [count, isRunning, { startCountdown, stopCountdown }] = useCount(
+    counterTarget ? counterTarget : 0
   );
 
-  const handleNumber = (n: number) => {
-    const value = counter + String(n);
-    setCounter(
-      compose(padZerosAndJoin, substringFromEnd4, padding4Zero, cleanSym)(value)
-    );
-  };
-
-  const handlePause = () => {
-    if (count > 0) {
-      if (isRunning) {
-        stopCountdown();
-        document.title = "Paused!!";
-      } else {
-        startCountdown();
-      }
-    }
-  };
-
-  const handleStop = () => {
-    stopCountdown();
-    setCounter(INITIAL_COUNTER);
-    setTarget(null);
-    document.title = "Stopped!!";
-  };
-
-  const handleStart = () => {
-    const [minutes, seconds] = counter.split(":").map((v) => parseInt(v)) as [
-      number,
-      number
-    ];
-
-    if (seconds + minutes * 60 > 0) {
-      setTarget(seconds + minutes * 60);
-      startCountdown();
-    }
-  };
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (count < 0) {
       document.title = "Finished!!";
       handleStop();
     } else {
       const minutes = Math.floor((count % (60 * 60)) / 60);
       const seconds = Math.floor(count % 60);
-      const counter = padZerosAndJoin([minutes, seconds]);
-      setCounter(counter);
-      if (counter !== INITIAL_COUNTER) {
-        document.title = counter;
+      const counterView = padZerosAndJoin([minutes, seconds]);
+      setCounterView(counterView);
+      if (counterView !== INITIAL_COUNTER_VIEW) {
+        document.title = counterView;
       }
     }
   }, [count]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (enterPress) {
       handleStart();
     }
@@ -104,6 +67,65 @@ export default function Countdown() {
     numberPressed,
   ]);
 
+  const handleNumber = (n: number) => {
+    const value = counterView + String(n);
+    setCounterView(
+      compose(padZerosAndJoin, substringFromEnd4, padding4Zero, cleanSym)(value)
+    );
+  };
+
+  const handlePause = () => {
+    if (count > 0) {
+      if (isRunning) {
+        stopCountdown();
+        document.title = "Paused!!";
+      } else {
+        startCountdown();
+      }
+    }
+  };
+
+  const handleStop = () => {
+    stopCountdown();
+    setCounterView(INITIAL_COUNTER_VIEW);
+    setCounterTarget(null);
+    document.title = "Stopped!!";
+  };
+
+  const handleStart = () => {
+    const [minutes, seconds] = counterView
+      .split(":")
+      .map((v) => parseInt(v)) as [number, number];
+
+    if (seconds + minutes * 60 > 0) {
+      setCounterTarget(seconds + minutes * 60);
+      startCountdown();
+    }
+  };
+
+  return {
+    counterView,
+    count,
+    counterTarget,
+    isRunning,
+    handleStart,
+    handleStop,
+    handlePause,
+    handleNumber,
+  };
+};
+
+export default function Countdown({ showKeyboard }: { showKeyboard: boolean }) {
+  const {
+    counterView,
+    count,
+    counterTarget,
+    isRunning,
+    handleStart,
+    handleStop,
+    handlePause,
+    handleNumber,
+  } = useCountdown();
   return (
     <div className="w-full">
       <div
@@ -155,29 +177,37 @@ export default function Countdown() {
           />
         )}
       </div>
-      <div
-        className="w-full flex justify-center border-4 border-t-0 border-r-gray-800  border-b-gray-800 border-l-gray-800 mb-6"
-        style={{ paddingTop: "18px" }}
-      >
+      <div className="w-full flex justify-center border-4 border-t-0 border-r-4 border-b-4 border-l-4 mb-6">
         <div
+          className="pt-5"
           style={{
             fontSize: "14vw",
           }}
         >
-          {counter}
+          {isRunning ? (
+            <div className="counter glitch">
+              <span>{counterView}</span>
+              {counterView}
+              <span>{counterView}</span>
+            </div>
+          ) : (
+            counterView
+          )}
         </div>
       </div>
-      <div className="flex lg:hidden nes-container justify-center my-6 visible lg:invisible">
-        <Keyboard
-          isPaused={!isRunning}
-          isStopped={target === null}
-          onPressNumber={(n) => handleNumber(n)}
-          onPause={() => handlePause()}
-          onPlay={() => handlePause()}
-          onStop={() => handleStop()}
-          onStart={() => handleStart()}
-        />
-      </div>
+      {showKeyboard ? (
+        <div className="flex justify-center my-6 ">
+          <Keyboard
+            isPaused={!isRunning}
+            isStopped={counterTarget === null}
+            onPressNumber={(n) => handleNumber(n)}
+            onPause={() => handlePause()}
+            onPlay={() => handlePause()}
+            onStop={() => handleStop()}
+            onStart={() => handleStart()}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
