@@ -8,6 +8,7 @@
   "dir": "ltr",
   "display": "fullscreen",
   "orientation": "portrait",
+  "start_url": "/",
   "icons": [
     {
       "src": "/icons/android-icon-192x192.png",
