@@ -23,7 +23,7 @@ const initialState: StateType = {
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [state, setA2HSState] = useState(initialState);
 
-  const installPrompt = (e) => {
+  const installPrompt = (e: any) => {
     console.log("beforeinstallprompt");
     // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
