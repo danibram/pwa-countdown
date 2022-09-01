@@ -49,20 +49,4 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// export const withA2HS = <P extends object>(
-//   Component: React.ComponentType<P>
-// ): React.Component<P & StateType> => {
-//   const ChildComponent = (props: P) => {
-//     return (
-//       <Context.Consumer>
-//         {(contextProps) => {
-//           return <Component {...(contextProps as StateType)} {...props} />;
-//         }}
-//       </Context.Consumer>
-//     );
-//   };
-
-//   return ChildComponent;
-// };
-
 export default Provider;
