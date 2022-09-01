@@ -23,7 +23,7 @@ const initialState: StateType = {
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [state, setA2HSState] = useState(initialState);
 
-  window.addEventListener("beforeinstallprompt", (e) => {
+  const installPrompt = (e) => {
     console.log("beforeinstallprompt");
     // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
@@ -33,13 +33,24 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
       deferredPrompt: e as any,
       isAppInstallable: true,
     }));
-  });
+  };
 
-  window.addEventListener("appinstalled", () => {
+  const installed = () => {
     setA2HSState((state) => ({
       ...state,
       isAppInstalled: true,
     }));
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("beforeinstallprompt", installPrompt);
+
+    window.addEventListener("appinstalled", installed);
+
+    () => {
+      window.removeEventListener("beforeinstallprompt", installPrompt);
+      window.removeEventListener("appinstalled", installed);
+    };
   });
 
   return (
