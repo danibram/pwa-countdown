@@ -1,4 +1,3 @@
-export const cleanSym = (str: string): string => str.replaceAll(":", "");
 export const padding4Zero = (str: string): string => str.padStart(4, "0");
 export const substringFromEnd4 = (str: string): [number, number] => {
   const [m2, m1, s2, s1] = str
@@ -15,5 +14,8 @@ export const substringFromEnd4 = (str: string): [number, number] => {
   return [minutes, seconds];
 };
 
-export const padZerosAndJoin = (arr: [number, number]): string =>
-  arr.map((v) => (v <= 9 ? String(v).padStart(2, "0") : String(v))).join(":");
+export const padZerosAndJoin = (arr: [number, number]): [string, string] =>
+  arr.map((v) => (v <= 9 ? String(v).padStart(2, "0") : String(v))) as [
+    string,
+    string
+  ];

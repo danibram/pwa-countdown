@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { compose } from "../helpers/compose";
 import {
-  cleanSym,
   padding4Zero,
   padZerosAndJoin,
   substringFromEnd4,
@@ -12,7 +11,8 @@ import GameSprite from "./Game_Sprite";
 import GameTile from "./Game_Tile";
 import Keyboard from "./Keyboard";
 
-const INITIAL_COUNTER_VIEW = "00:00";
+const INITIAL_COUNTER_VIEW = ["00", "00"];
+const COUNTER_SYMBOL = ":";
 
 const useCountdown = () => {
   const [enterPress] = useKeyPress("Enter");
@@ -38,7 +38,7 @@ const useCountdown = () => {
       const counterView = padZerosAndJoin([minutes, seconds]);
       setCounterView(counterView);
       if (counterView !== INITIAL_COUNTER_VIEW) {
-        document.title = counterView;
+        document.title = counterView.join(COUNTER_SYMBOL);
       }
     }
   }, [count]);
@@ -68,9 +68,9 @@ const useCountdown = () => {
   ]);
 
   const handleNumber = (n: number) => {
-    const value = counterView + String(n);
+    const value = counterView.join("") + String(n);
     setCounterView(
-      compose(padZerosAndJoin, substringFromEnd4, padding4Zero, cleanSym)(value)
+      compose(padZerosAndJoin, substringFromEnd4, padding4Zero)(value)
     );
   };
 
@@ -93,9 +93,10 @@ const useCountdown = () => {
   };
 
   const handleStart = () => {
-    const [minutes, seconds] = counterView
-      .split(":")
-      .map((v) => parseInt(v)) as [number, number];
+    const [minutes, seconds] = counterView.map((v) => parseInt(v)) as [
+      number,
+      number
+    ];
 
     if (seconds + minutes * 60 > 0) {
       setCounterTarget(seconds + minutes * 60);
@@ -177,21 +178,70 @@ export default function Countdown({ showKeyboard }: { showKeyboard: boolean }) {
           />
         )}
       </div>
-      <div className="w-full flex justify-center border-4 border-t-0 border-r-4 border-b-4 border-l-4 mb-6">
+      <div className="w-full flex flex-col justify-center border-4 border-t-0 border-r-4 border-b-4 border-l-4 mb-6">
         <div
-          className="pt-5"
+          className="pt-5 hidden justify-center sm:flex"
           style={{
             fontSize: "14vw",
           }}
         >
           {isRunning ? (
-            <div className="counter glitch">
-              <span>{counterView}</span>
-              {counterView}
-              <span>{counterView}</span>
+            <div className="counter glitch ">
+              <span>{counterView.join(COUNTER_SYMBOL)}</span>
+              {counterView.join(COUNTER_SYMBOL)}
+              <span>{counterView.join(COUNTER_SYMBOL)}</span>
             </div>
           ) : (
-            counterView
+            counterView.join(COUNTER_SYMBOL)
+          )}
+        </div>
+        <div
+          className="pt-5 flex justify-center sm:hidden"
+          style={{
+            fontSize: "30vw",
+          }}
+        >
+          {isRunning ? (
+            <div className="counter glitch">
+              <span>{counterView[0]}</span>
+              {counterView[0]}
+              <span>{counterView[0]}</span>
+            </div>
+          ) : (
+            counterView[0]
+          )}
+        </div>
+        <div
+          className="flex justify-center sm:hidden"
+          style={{
+            fontSize: "30vw",
+            lineHeight: "5vw",
+          }}
+        >
+          {isRunning ? (
+            <div className="counter glitch">
+              <>
+                <span>-</span> - <span>-</span>
+              </>
+            </div>
+          ) : (
+            "-"
+          )}
+        </div>
+        <div
+          className="flex justify-center sm:hidden"
+          style={{
+            fontSize: "30vw",
+          }}
+        >
+          {isRunning ? (
+            <div className="counter glitch">
+              <span>{counterView[1]}</span>
+              {counterView[1]}
+              <span>{counterView[1]}</span>
+            </div>
+          ) : (
+            counterView[1]
           )}
         </div>
       </div>

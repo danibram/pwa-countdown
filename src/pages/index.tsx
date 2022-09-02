@@ -33,8 +33,8 @@ const Home: NextPage = () => {
                 </a>
               </li>
               <li>Enter to start</li>
-              <li>Spacebar to pause/unpause</li>
-              <li>Escape/Backspace to stop</li>
+              <li>Spacebar to pause / unpause</li>
+              <li>Escape / Backspace to stop</li>
 
               {isAppInstallable && !isAppInstalled ? (
                 <li>
