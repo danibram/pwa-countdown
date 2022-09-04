@@ -8,6 +8,7 @@ import Main from "../components/templates/Main";
 import ModalHelp from "../components/templates/ModalHelp";
 import ModalKeyboard from "../components/templates/ModalKeyboard";
 import useCountdown from "../hooks/useCountdown";
+import { useQuery } from "../hooks/useQuery";
 
 const Home: NextPage = () => {
   const [showKeyboard, setShowKeyboard] = React.useState(false);
@@ -24,6 +25,7 @@ const Home: NextPage = () => {
     handlePause,
     handleNumber,
   } = useCountdown();
+  useQuery(handleNumber);
   const [parent]: any = useAutoAnimate();
 
   return (
