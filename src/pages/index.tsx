@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import React from "react";
 
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import UpperMenu from "../components/organisms/UpperMenu";
 import AdditionalCSS from "../components/templates/AdditionalCSS";
 import Main from "../components/templates/Main";
@@ -23,9 +24,10 @@ const Home: NextPage = () => {
     handlePause,
     handleNumber,
   } = useCountdown();
+  const [parent]: any = useAutoAnimate();
 
   return (
-    <>
+    <div ref={parent}>
       <AdditionalCSS />
       <UpperMenu
         isStopped={isStopped}
@@ -49,7 +51,7 @@ const Home: NextPage = () => {
           }}
         />
       ) : null}
-    </>
+    </div>
   );
 };
 

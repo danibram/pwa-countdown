@@ -4,7 +4,7 @@ import NessButton from "../atoms/NessButton";
 
 const ModalHelp = ({ onClose }: { onClose: () => void }) => {
   return (
-    <Modal>
+    <Modal onClickOutside={() => onClose()}>
       <NessBlock title={"Trainer tips"}>
         <div className="lists">
           <ul className="nes-list is-disc">

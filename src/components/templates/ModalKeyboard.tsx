@@ -17,7 +17,7 @@ const ModalHelp = ({
   onStart: () => void;
 }) => {
   return (
-    <Modal>
+    <Modal onClickOutside={() => onClose()}>
       <NessBlock title={`${counterView[0]}:${counterView[1]}`}>
         <Keyboard onPressNumber={onPressNumber} onStop={onStop} />
       </NessBlock>
