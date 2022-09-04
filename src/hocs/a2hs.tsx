@@ -25,9 +25,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
 
   const installPrompt = (e: any) => {
     console.log("beforeinstallprompt");
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     setA2HSState((state) => ({
       ...state,
       deferredPrompt: e as any,
@@ -44,9 +42,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
 
   React.useEffect(() => {
     window.addEventListener("beforeinstallprompt", installPrompt);
-
     window.addEventListener("appinstalled", installed);
-
     () => {
       window.removeEventListener("beforeinstallprompt", installPrompt);
       window.removeEventListener("appinstalled", installed);
