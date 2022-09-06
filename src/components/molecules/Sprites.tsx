@@ -1,15 +1,16 @@
+import { counterState } from "../../hooks/useCountdown";
 import { GameSprite, GameTile } from "../atoms/Game";
 
 const Sprites = ({
-  isRunning,
+  counterState,
   count,
 }: {
-  isRunning: boolean;
+  counterState: counterState;
   count: number;
 }) => {
   return (
     <>
-      {isRunning ? (
+      {counterState == "running" ? (
         <GameSprite
           src={"/ground.png"}
           states={12}
@@ -25,7 +26,7 @@ const Sprites = ({
           scale={1}
         />
       )}
-      {isRunning ? (
+      {counterState == "running" ? (
         <GameSprite
           src={"/dino-run.png"}
           states={4}

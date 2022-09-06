@@ -34,9 +34,6 @@ button:hover {
   color: #007948 !important;
 }
 
-* {
-}
-
 .nes-list.is-disc li::before {
   color: #06fc99 !important;
 }

@@ -50,6 +50,14 @@ const useBaseCountdown = (
   ];
 };
 
+export type counterState =
+  | "not-started"
+  | "ready"
+  | "running"
+  | "paused"
+  | "stopped"
+  | "finished";
+
 const useCountdown = () => {
   const INITIAL_COUNTER_VIEW: [string, string] = ["00", "00"];
   const COUNTER_SYMBOL = ":";
@@ -60,6 +68,8 @@ const useCountdown = () => {
   const [spacePress] = useKeyPress(" ");
   const [numbersPressed, numberPressed] = useKeyPress("numbers");
 
+  const [counterState, setCounterState] =
+    React.useState<counterState>("not-started");
   const [counterView, setCounterView] =
     React.useState<[string, string]>(INITIAL_COUNTER_VIEW);
   const [counterTarget, setCounterTarget] = React.useState<null | number>(null);
@@ -67,10 +77,17 @@ const useCountdown = () => {
   const [count, isRunning, { startCountdown, stopCountdown }] =
     useBaseCountdown(counterTarget ? counterTarget : 0);
 
+  const handleReset = () => {
+    stopCountdown();
+    setCounterView(INITIAL_COUNTER_VIEW);
+    setCounterTarget(null);
+  };
+
   React.useEffect(() => {
     if (count < 0) {
       document.title = "Finished!!";
-      handleStop();
+      setCounterState("finished");
+      handleReset();
     } else {
       const minutes = Math.floor((count % (60 * 60)) / 60);
       const seconds = Math.floor(count % 60);
@@ -108,9 +125,16 @@ const useCountdown = () => {
 
   const handleNumber = (n: number) => {
     const value = counterView.join("") + String(n);
-    setCounterView(
-      compose(padZerosAndJoin, substringFromEnd4, padding4Zero)(value)
-    );
+    const valueArr = compose(
+      padZerosAndJoin,
+      substringFromEnd4,
+      padding4Zero
+    )(value);
+    setCounterView(valueArr);
+
+    if (valueArr[0] !== "00" || valueArr[1] !== "00") {
+      setCounterState("ready");
+    }
   };
 
   const handlePause = () => {
@@ -118,17 +142,18 @@ const useCountdown = () => {
       if (isRunning) {
         stopCountdown();
         document.title = "Paused!!";
+        setCounterState("paused");
       } else {
         startCountdown();
+        setCounterState("running");
       }
     }
   };
 
   const handleStop = () => {
-    stopCountdown();
-    setCounterView(INITIAL_COUNTER_VIEW);
-    setCounterTarget(null);
+    handleReset();
     document.title = "Stopped!!";
+    setCounterState("stopped");
   };
 
   const handleStart = () => {
@@ -140,16 +165,15 @@ const useCountdown = () => {
     if (seconds + minutes * 60 > 0) {
       setCounterTarget(seconds + minutes * 60);
       startCountdown();
+      setCounterState("running");
     }
   };
 
   return {
+    counterState,
     counterView,
     count,
     counterTarget,
-    isStopped: !counterTarget,
-    isPaused: !isRunning && counterTarget !== null && counterTarget > 0,
-    isRunning,
     handleStart,
     handleStop,
     handlePause,

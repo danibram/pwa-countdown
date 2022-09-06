@@ -10,11 +10,6 @@ export const useQuery = (onAction: any) => {
       if (!isNaN(initAsNumber) && initAsNumber > 0) {
         onAction(initAsNumber);
       }
-      if (window.history.pushState) {
-        const newURL = new URL(window.location.href);
-        newURL.search = "";
-        window.history.pushState({ path: newURL.href }, "", newURL.href);
-      }
     }
   }, []);
 };

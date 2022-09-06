@@ -1,15 +1,16 @@
+import { counterState } from "../../hooks/useCountdown";
 import GlitchClock from "../atoms/GlitchClock";
 
 const CountdownView = ({
-  isRunning,
+  counterState,
   isVertical,
   counterView,
 }: {
-  isRunning: boolean;
+  counterState: counterState;
   isVertical: boolean;
   counterView: [string, string];
 }) => {
-  return isRunning ? (
+  return counterState == "running" ? (
     <>
       <GlitchClock clock={counterView[0]} />
       <GlitchClock
