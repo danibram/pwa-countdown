@@ -1,5 +1,12 @@
-export const padding4Zero = (str: string): string => str.padStart(4, "0");
-export const substringFromEnd4 = (str: string): [number, number] => {
+export const padZeroAndSplit = (n: number): [string, string] =>
+  (n <= 9 ? String(n).padStart(2, "0").split("") : String(n).split("")) as [
+    string,
+    string
+  ];
+export const padding4Zero = (str: string): string => str.padStart(4, "_");
+export const substringFromEnd4 = (
+  str: string
+): [string, string, string, string] => {
   const [m2, m1, s2, s1] = str
     .split("")
     .reverse()
@@ -8,14 +15,17 @@ export const substringFromEnd4 = (str: string): [number, number] => {
     .split("")
     .reverse() as [string, string, string, string];
 
-  const minutes = parseInt(m2 + m1);
-  const seconds = parseInt(s2 + s1);
-
-  return [minutes, seconds];
+  return [m2, m1, s2, s1];
 };
 
-export const padZerosAndJoin = (arr: [number, number]): [string, string] =>
-  arr.map((v) => (v <= 9 ? String(v).padStart(2, "0") : String(v))) as [
-    string,
-    string
-  ];
+export const toClock = ([m2, m1, s2, s1]: [
+  string,
+  string,
+  string,
+  string
+]): string => m2 + m1 + ":" + s2 + s1;
+
+export const cleanDashes = (
+  arr: [string, string, string, string]
+): [string, string, string, string] =>
+  arr.map((s) => s.replace("_", "0")) as [string, string, string, string];

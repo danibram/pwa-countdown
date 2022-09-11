@@ -106,7 +106,7 @@ button:hover {
   z-index: 1;
 }
 
-/* .overlayAnimation::before {
+.overlayAnimation::before {
   content: "";
   pointer-events: none;
   position: absolute;
@@ -151,7 +151,7 @@ button:hover {
   100% {
     background-position: 0 100vh;
   }
-} */
+}
 
 .overlay {
   z-index: 4100;

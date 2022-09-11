@@ -8,22 +8,14 @@ export default function Countdown({
 }: {
   counterState: counterState;
   isVertical: boolean;
-  counterView: [string, string];
+  counterView: [string, string, string, string];
 }) {
   return (
-    <div
-      className={[
-        "w-full flex justify-center border-4 border-t-4 border-r-4 border-b-4 border-l-4 mb-6",
-        ...(isVertical ? ["flex-col"] : []),
-      ].join(" ")}
-    >
+    <div className={["w-full flex justify-center mb-6"].join(" ")}>
       <div
-        className={[
-          "justify-center items-center flex",
-          ...(isVertical ? ["flex-col"] : []),
-        ].join(" ")}
+        className={["justify-center items-center flex"].join(" ")}
         style={{
-          fontSize: !isVertical ? "16vw" : "26vw",
+          fontSize: "18vw",
         }}
       >
         <CountdownView

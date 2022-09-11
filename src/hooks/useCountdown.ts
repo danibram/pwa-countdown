@@ -3,8 +3,9 @@ import { useInterval } from "./useInterval";
 import React, { useCallback, useEffect, useState } from "react";
 import { compose } from "../helpers/compose";
 import {
+  cleanDashes,
   padding4Zero,
-  padZerosAndJoin,
+  padZeroAndSplit,
   substringFromEnd4,
 } from "../helpers/formating";
 import { useKeyPress } from "./useKeyPress";
@@ -59,7 +60,12 @@ export type counterState =
   | "finished";
 
 const useCountdown = () => {
-  const INITIAL_COUNTER_VIEW: [string, string] = ["00", "00"];
+  const INITIAL_COUNTER_VIEW: [string, string, string, string] = [
+    "_",
+    "_",
+    "_",
+    "_",
+  ];
   const COUNTER_SYMBOL = ":";
 
   const [enterPress] = useKeyPress("Enter");
@@ -71,7 +77,7 @@ const useCountdown = () => {
   const [counterState, setCounterState] =
     React.useState<counterState>("not-started");
   const [counterView, setCounterView] =
-    React.useState<[string, string]>(INITIAL_COUNTER_VIEW);
+    React.useState<[string, string, string, string]>(INITIAL_COUNTER_VIEW);
   const [counterTarget, setCounterTarget] = React.useState<null | number>(null);
 
   const [count, isRunning, { startCountdown, stopCountdown }] =
@@ -84,17 +90,18 @@ const useCountdown = () => {
   };
 
   React.useEffect(() => {
-    if (count < 0) {
-      document.title = "Finished!!";
-      setCounterState("finished");
-      handleReset();
-    } else {
-      const minutes = Math.floor((count % (60 * 60)) / 60);
-      const seconds = Math.floor(count % 60);
-      const counterView = padZerosAndJoin([minutes, seconds]);
-      setCounterView(counterView);
-      if (counterView !== INITIAL_COUNTER_VIEW) {
-        document.title = counterView.join(COUNTER_SYMBOL);
+    if (counterState === "running") {
+      if (count < 0) {
+        document.title = "Finished!!";
+        setCounterState("finished");
+        handleReset();
+      } else {
+        const minutes = Math.floor((count % (60 * 60)) / 60);
+        const seconds = Math.floor(count % 60);
+        const [m1, m2] = padZeroAndSplit(minutes);
+        const [s1, s2] = padZeroAndSplit(seconds);
+        setCounterView([m1, m2, s1, s2]);
+        document.title = [m1, m2, COUNTER_SYMBOL, s1, s2].join("");
       }
     }
   }, [count]);
@@ -125,14 +132,10 @@ const useCountdown = () => {
 
   const handleNumber = (n: number) => {
     const value = counterView.join("") + String(n);
-    const valueArr = compose(
-      padZerosAndJoin,
-      substringFromEnd4,
-      padding4Zero
-    )(value);
+    const valueArr = compose(substringFromEnd4, padding4Zero)(value);
     setCounterView(valueArr);
 
-    if (valueArr[0] !== "00" || valueArr[1] !== "00") {
+    if (!valueArr.every((s) => s === "0" || s === "_")) {
       setCounterState("ready");
     }
   };
@@ -157,17 +160,19 @@ const useCountdown = () => {
   };
 
   const handleStart = () => {
-    const [minutes, seconds] = counterView.map((v) => parseInt(v)) as [
-      number,
-      number
-    ];
+    const [m2, m1, s2, s1] = cleanDashes(counterView);
+    const minutes = parseInt(m2 + m1);
+    const seconds = parseInt(s2 + s1);
 
     if (seconds + minutes * 60 > 0) {
+      setCounterView([m2, m1, s2, s1]);
       setCounterTarget(seconds + minutes * 60);
       startCountdown();
       setCounterState("running");
     }
   };
+
+  console.log(counterView);
 
   return {
     counterState,

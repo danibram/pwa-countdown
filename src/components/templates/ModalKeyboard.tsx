@@ -1,3 +1,4 @@
+import { toClock } from "../../helpers/formating";
 import Modal from "../atoms/Modal";
 import NessBlock from "../atoms/NessBlock";
 import NessButton from "../atoms/NessButton";
@@ -10,7 +11,7 @@ const ModalHelp = ({
   onClose,
   onStart,
 }: {
-  counterView: [string, string];
+  counterView: [string, string, string, string];
   onPressNumber: (arg0: number) => void;
   onStop: () => void;
   onClose: () => void;
@@ -18,7 +19,7 @@ const ModalHelp = ({
 }) => {
   return (
     <Modal onClickOutside={() => onClose()}>
-      <NessBlock title={`${counterView[0]}:${counterView[1]}`}>
+      <NessBlock title={toClock(counterView)}>
         <Keyboard onPressNumber={onPressNumber} onStop={onStop} />
       </NessBlock>
       <NessButton onClick={onClose}>Close</NessButton>

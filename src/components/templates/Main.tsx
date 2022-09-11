@@ -7,7 +7,7 @@ import Countdown from "../organisms/Countdown";
 import Messages from "../organisms/Messages";
 import ModalKeyboard from "./ModalKeyboard";
 
-const ModalHelp = ({
+const Main = ({
   counterState,
   count,
   counterView,
@@ -18,7 +18,7 @@ const ModalHelp = ({
 }: {
   counterState: counterState;
   count: number;
-  counterView: [string, string];
+  counterView: [string, string, string, string];
   onStart: () => void;
   onPause: () => void;
   onStop: () => void;
@@ -38,6 +38,7 @@ const ModalHelp = ({
         />
         <Messages
           counterState={counterState}
+          isVertical={isVertical}
           onShowKeyboard={() => setShowKeyboard(true)}
           onStart={onStart}
           onPause={onPause}
@@ -66,4 +67,4 @@ const ModalHelp = ({
   );
 };
 
-export default ModalHelp;
+export default Main;
