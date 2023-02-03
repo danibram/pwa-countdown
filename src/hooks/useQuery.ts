@@ -1,6 +1,6 @@
 import React from "react";
 
-export const useQuery = (onAction: any) => {
+export const useQuery = (onAction: (n: number) => void) => {
   React.useEffect(() => {
     const url = window.location.href;
     const r = new URL(url);

@@ -8,6 +8,7 @@ import Main from "../components/templates/Main";
 import ModalHelp from "../components/templates/ModalHelp";
 import useCountdown from "../hooks/useCountdown";
 import { useQuery } from "../hooks/useQuery";
+import { useSound } from "../hooks/useSound";
 
 const Home: NextPage = () => {
   const [showHelp, setShowHelp] = React.useState(false);
@@ -22,12 +23,17 @@ const Home: NextPage = () => {
     handleNumber,
   } = useCountdown();
   useQuery(handleNumber);
+  const { muted, toogleMute } = useSound(count, counterState);
   const [parent]: any = useAutoAnimate();
 
   return (
     <div ref={parent} className="absolute w-full h-full">
       <AdditionalCSS />
-      <UpperMenu showHelp={() => setShowHelp(true)} />
+      <UpperMenu
+        muted={muted}
+        toogleMute={toogleMute}
+        showHelp={() => setShowHelp(true)}
+      />
       <Main
         counterState={counterState}
         count={count}

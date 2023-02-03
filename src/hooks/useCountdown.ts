@@ -172,8 +172,6 @@ const useCountdown = () => {
     }
   };
 
-  console.log(counterView);
-
   return {
     counterState,
     counterView,
