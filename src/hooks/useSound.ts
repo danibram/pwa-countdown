@@ -15,8 +15,6 @@ export const useSound = (count: number, counterState: counterState) => {
     Map<string, HTMLAudioElement>
   >(new Map());
 
-  console.log(audioQueue.size);
-
   const playAudio = React.useCallback(
     (pathToSound: string) => {
       const audio = new Audio(pathToSound);
@@ -51,11 +49,7 @@ export const useSound = (count: number, counterState: counterState) => {
   React.useEffect(() => {
     if (count % 60 == 0 && counterState == "running") playAudio(tick);
 
-    if (count == 5) {
-      playAudio(five);
-    } else if (count == 4) {
-      playAudio(four);
-    } else if (count == 3) {
+    if (count == 3) {
       playAudio(three);
     } else if (count == 2) {
       playAudio(two);
