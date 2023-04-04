@@ -1,6 +1,4 @@
 import React from "react";
-import five from "../../public/sounds/AnnouncerFive.mp3";
-import four from "../../public/sounds/AnnouncerFour.mp3";
 import one from "../../public/sounds/AnnouncerOne.mp3";
 import three from "../../public/sounds/AnnouncerThree.mp3";
 import timeUp from "../../public/sounds/AnnouncerTimeUp.mp3";
@@ -24,6 +22,7 @@ export const useSound = (count: number, counterState: counterState) => {
           return queue;
         });
       };
+      audio.volume = 0.5;
       audio.play();
       audio.muted = muted;
       setAudioQueue((queue) => {
@@ -35,9 +34,15 @@ export const useSound = (count: number, counterState: counterState) => {
 
   React.useEffect(() => {
     if (muted) {
-      audioQueue.forEach((sound) => (sound.muted = true));
+      audioQueue.forEach((sound) => {
+        sound.muted = true;
+        sound.volume = 0.0;
+      });
     } else {
-      audioQueue.forEach((sound) => (sound.muted = false));
+      audioQueue.forEach((sound) => {
+        sound.muted = false;
+        sound.volume = 0.5;
+      });
     }
   }, [muted]);
 
