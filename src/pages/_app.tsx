@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import type { AppType } from "next/dist/shared/lib/utils";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -19,6 +20,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       </Head>
       <A2HSProvider>
         <Component {...pageProps} />
+        <Analytics />
       </A2HSProvider>
     </>
   );
