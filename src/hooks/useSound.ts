@@ -7,6 +7,7 @@ import tick from "../../public/sounds/Dot.mp3";
 import stageclearSound from "../../public/sounds/smb_stage_clear.mp3";
 import { counterState } from "./useCountdown";
 
+const baseVolume = 0.2;
 export const useSound = (count: number, counterState: counterState) => {
   const [muted, setMuted] = React.useState(false);
   const [audioQueue, setAudioQueue] = React.useState<
@@ -22,7 +23,7 @@ export const useSound = (count: number, counterState: counterState) => {
           return queue;
         });
       };
-      audio.volume = 0.5;
+      audio.volume = baseVolume;
       audio.play();
       audio.muted = muted;
       setAudioQueue((queue) => {
@@ -41,7 +42,7 @@ export const useSound = (count: number, counterState: counterState) => {
     } else {
       audioQueue.forEach((sound) => {
         sound.muted = false;
-        sound.volume = 0.5;
+        sound.volume = baseVolume;
       });
     }
   }, [muted]);
